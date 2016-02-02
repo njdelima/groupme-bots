@@ -5,8 +5,12 @@
 
 	$data = json_decode(file_get_contents('php://input'));
 
-	if ($data == null) exit();
+	if ($data == null) exit;
 
+	if ($data->sender_type == "bot") {
+		exit;
+	}
+	
 	$text = $data->text;
 
 	postMessage(strtoupper($text));
