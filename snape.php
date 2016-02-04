@@ -6,11 +6,36 @@
 
 	if ($data == null) exit;
 
-	if ($data->sender_type == "bot") exit;
+	if ($data->sender_type == "bot" || $data->sender_type == "system") exit;
 
 	$text = $data->text;
 
-	postMessage(strtoupper($text));
+	preg_match('/snape,? make a saveplate for (.+)/i', $text, $matches);
+
+	if ($matches != null) {
+		addName($matches[1]);
+	} else {
+		preg_match('/snape,? remove saveplate for (.+)/i', $text, $matches);
+
+		if ($matches != null) {
+			removeName($matches[1]);
+		}
+	}
+
+	function addName($name) {
+		file_put_contents("list", $name . "\n", FILE_APPEND);
+		postMessage("Added saveplate for " . $name . ".");
+	}
+	function removeName($name) {
+		$oldList = file_get_contents("list");
+		$newList = str_replace($name . "\n", "", $oldList);
+		if ($newList == $oldList) {
+			postMessage("Sorry! I couldn't find " . $name . "on the list.");
+		} else {
+			file_put_contents("list", $newList);
+			postMessage("Removed saveplate for " . $name . ".");
+		}
+	}
 
 	function postMessage($message) {
 		global $bot_id;
