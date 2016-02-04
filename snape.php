@@ -1,5 +1,4 @@
 <?php
-
 	// needs an access token, bot id, group id
 	require_once 'neeraj_credentials.php';
 
@@ -7,10 +6,8 @@
 
 	if ($data == null) exit;
 
-	if ($data->sender_type == "bot") {
-		exit;
-	}
-	
+	if ($data->sender_type == "bot") exit;
+
 	$text = $data->text;
 
 	postMessage(strtoupper($text));
