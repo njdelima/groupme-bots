@@ -4,5 +4,5 @@
 	 */
 	require_once 'functions.php';
 	listNames();
-	file_put_contents("list","");
+	file_put_contents($DIR . "list","");
 ?>
