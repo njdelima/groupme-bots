@@ -19,12 +19,21 @@
 
 		if ($matches != null) {
 			removeName($matches[1]);
+		} else {
+			preg_match('/snape,? list(.+)saveplates/i', $text, $matches);
+
+			if ($matches != null) {
+				listNames();
+			}
 		}
 	}
-
 	function addName($name) {
-		file_put_contents("list", $name . "\n", FILE_APPEND);
-		postMessage("Added saveplate for " . $name . ".");
+        if ( ( date("N") < 5 ) || ( date("N") == 5 && date("G") < 12 ) ) {
+        	file_put_contents("list", $name . "\n", FILE_APPEND);
+			postMessage("Added saveplate for " . $name . ".");
+        } else {
+        	postMessage("No saveplates until Monday.");
+        }
 	}
 	function removeName($name) {
 		$oldList = file_get_contents("list");
@@ -35,6 +44,14 @@
 			file_put_contents("list", $newList);
 			postMessage("Removed saveplate for " . $name . ".");
 		}
+	}
+
+	function listNames() {
+		$meal = date("G") < 12 ? "Lunch" : "Dinner";
+		$message = $meal . " saveplates for " . date("l, jS \of F") . ":\n\n";
+		$message = $message . file_get_contents("list");
+
+		postMessage($message);
 	}
 
 	function postMessage($message) {
