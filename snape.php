@@ -5,7 +5,7 @@
 	 * valid command, and does what's needed
 	 */
 
-	require_once 'functions.php';
+	require_once 'name_lookup.php';
 
 	$data = json_decode(file_get_contents('php://input'));
 
@@ -17,23 +17,49 @@
 
 	if ($text == "meow" || $text == "Meow") {
 		postMessage("stfu karma whore");
+		exit;
 	}
 
-	preg_match('/snape,? (make a|add)? ?saveplate for (.+)/i', $text, $matches);
+	preg_match('/snape,? ?(make a|add)? ?save ?plate for (.+)/i', $text, $matches);
 
 	if ($matches != null) {
 		addName($matches[count($matches) - 1]);
-	} else {
-		preg_match('/snape,? (remove|cancel) ?saveplate for (.+)/i', $text, $matches);
-
-		if ($matches != null) {
-			removeName($matches[count($matches) - 1]);
-		} else {
-			preg_match('/snape,? list(.+)saveplates/i', $text, $matches);
-
-			if ($matches != null) {
-				listNames();
-			}
-		}
+		exit;
 	}
+	preg_match('/snape,? ?(remove|cancel) ?save ?plate for (.+)/i', $text, $matches);
+
+	if ($matches != null) {
+		removeName($matches[count($matches) - 1]);
+		exit;
+	}
+
+	preg_match('/(snape,?|!) ?(add|make)(\s*)(save ?plate)?/i', $text, $matches);
+
+	if ($matches != null) {
+		$map = getNameMap();
+
+        $name = array_search($data -> name, $map);
+        
+        $name === FALSE ? addName($data -> name) : addName($name);
+        exit;
+    }
+
+    preg_match('/(snape,?|!) ?(remove|cancel)(\s*)(save ?plate)?/i', $text, $matches);
+
+    if ($matches != null) {
+		$map = getNameMap();
+
+        $name = array_search($data -> name, $map);
+        
+        $name === FALSE ? removeName($data -> name) : removeName($name);
+        exit;
+    }
+
+	preg_match('/(snape,?|!) ?list(\s*)(save ?plates)?/i', $text, $matches);
+
+	if ($matches != null) {
+		listNames();
+		exit;
+	}
+	
 ?>
