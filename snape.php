@@ -37,9 +37,9 @@
 	}
 	function removeName($name) {
 		$oldList = file_get_contents("list");
-		$newList = str_replace($name . "\n", "", $oldList);
+		$newList = str_ireplace($name . "\n", "", $oldList);
 		if ($newList == $oldList) {
-			postMessage("Sorry! I couldn't find " . $name . "on the list.");
+			postMessage("Sorry! I couldn't find " . $name . " on the list.");
 		} else {
 			file_put_contents("list", $newList);
 			postMessage("Removed saveplate for " . $name . ".");
