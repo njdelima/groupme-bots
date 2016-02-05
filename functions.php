@@ -5,6 +5,7 @@
 	$DIR = "/var/www/gtpkt.org/groupme/save_plates/";
 
 	function addName($name) {
+		global $DIR;
         if ( ( date("N") < 5 ) || ( date("N") == 5 && date("G") < 12 ) ) {
         	file_put_contents($DIR . "list", $name . "\n", FILE_APPEND);
 			postMessage("Added saveplate for " . $name . ".");
@@ -13,6 +14,7 @@
         }
 	}
 	function removeName($name) {
+		global $DIR;
 		$oldList = file_get_contents($DIR . "list");
 		$newList = str_ireplace($name . "\n", "", $oldList);
 		if ($newList == $oldList) {
@@ -24,6 +26,7 @@
 	}
 
 	function listNames() {
+		global $DIR;
 		$meal = date("G") < 12 ? "Lunch" : "Dinner";
 		$message = $meal . " saveplates for " . date("l, jS \of F") . ":\n\n";
 		$message = $message . file_get_contents($DIR . "list");
