@@ -10,15 +10,15 @@
 
 	$text = $data->text;
 
-	preg_match('/snape,? (make a|add)? ?saveplate for (.+)/i', $text, $matches);
+		preg_match('/snape,? (make a|add)? ?saveplate for (.+)/i', $text, $matches);
 
 	if ($matches != null) {
-		addName($matches[1]);
+		addName($matches[count($matches) - 1]);
 	} else {
 		preg_match('/snape,? (remove|cancel) ?saveplate for (.+)/i', $text, $matches);
 
 		if ($matches != null) {
-			removeName($matches[1]);
+			removeName($matches[count($matches) - 1]);
 		} else {
 			preg_match('/snape,? list(.+)saveplates/i', $text, $matches);
 
