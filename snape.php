@@ -10,12 +10,12 @@
 
 	$text = $data->text;
 
-	preg_match('/snape,? make a saveplate for (.+)/i', $text, $matches);
+	preg_match('/snape,? (make a|add)? ?saveplate for (.+)/i', $text, $matches);
 
 	if ($matches != null) {
 		addName($matches[1]);
 	} else {
-		preg_match('/snape,? remove saveplate for (.+)/i', $text, $matches);
+		preg_match('/snape,? (remove|cancel) ?saveplate for (.+)/i', $text, $matches);
 
 		if ($matches != null) {
 			removeName($matches[1]);
