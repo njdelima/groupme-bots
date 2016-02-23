@@ -1,7 +1,7 @@
 <?php
 	/*
-	 * This is the bot callback function. All messages from the group
-	 * post to this script. This script decides is the message is a 
+	 * This is the bot callback script. All messages from the group
+	 * post to this script. This script decides is the message is a
 	 * valid command, and does what's needed
 	 */
 
@@ -39,9 +39,8 @@
 		$map = getNameMap();
 
         $name = array_search($data -> name, $map);
-        
+
         $name === FALSE ? addName($data -> name) : addName($name);
-        exit;
     }
 
     preg_match('/(snape,?|!) ?(remove|cancel)(\s*)(save ?plate)?/i', $text, $matches);
@@ -50,10 +49,39 @@
 		$map = getNameMap();
 
         $name = array_search($data -> name, $map);
-        
+
         $name === FALSE ? removeName($data -> name) : removeName($name);
-        exit;
     }
+
+	preg_match('/(snape,?|!) ?(tbt|throwback)/i', $text, $matches);
+
+	if ($matches != null) {
+	        $directory = "pictures/";
+	        $images = glob("" . $directory . "*.jpg");
+	        $imgs = '';
+	        foreach($images as $image) { $imgs[] = "$image"; }
+
+	        $directory = "pictures/*/";
+	        $images = glob("" . $directory . "*.jpg");
+	        foreach($images as $image) { $imgs[] = "$image"; }
+
+	        $directory = "pictures/*/*/";
+	        $images = glob("" . $directory . "*.jpg");
+	        foreach($images as $image) { $imgs[] = "$image"; }
+
+	        $directory = "pictures/*/*/*/";
+       		$images = glob("" . $directory . "*.jpg");
+        	foreach($images as $image) { $imgs[] = "$image"; }
+
+	        $directory = "pictures/*/*/*/*/";
+	        $images = glob("" . $directory . "*.jpg");
+	        foreach($images as $image) { $imgs[] = "$image"; }
+
+        	shuffle($imgs);
+		$response = json_decode(uploadImg("@".$imgs[5]));
+
+		postImg($response->payload->url);
+	}
 
 	preg_match('/(snape,?|!) ?list(\s*)(save ?plates)?/i', $text, $matches);
 
